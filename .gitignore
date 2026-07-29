@@ -1,6 +1,14 @@
+venv/
 __pycache__/
 *.pyc
-venv/
-.env
-node_modules/ 
+
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+backend/charts/*
+!backend/charts/.gitkeep
+
+backend/reports/*
+!backend/reports/.gitkeep
+
 *.db
