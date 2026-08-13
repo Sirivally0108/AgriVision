@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
+import Analysis from "./pages/Analysis";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import UploadDataset from "./pages/UploadDataset";
@@ -20,6 +20,7 @@ function App() {
         <Route path="/charts" element={<Charts />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/prediction" element={<Prediction />} />
+        <Route path="/analysis" element={<Analysis />} />
       </Routes>
     </>
   );

@@ -1,41 +1,88 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import {
+  FaHome,
+  FaUpload,
+  FaChartBar,
+  FaSearch,
+  FaChartPie,
+  FaFilePdf,
+  FaRobot,
+  FaLeaf,
+} from "react-icons/fa";
 
 function Navbar() {
+  const location = useLocation();
+
+  const links = [
+    { path: "/", name: "Home", icon: <FaHome /> },
+    { path: "/upload", name: "Upload", icon: <FaUpload /> },
+    { path: "/dashboard", name: "Dashboard", icon: <FaChartBar /> },
+    { path: "/analysis", name: "Analysis", icon: <FaSearch /> },
+    { path: "/charts", name: "Charts", icon: <FaChartPie /> },
+    { path: "/reports", name: "Reports", icon: <FaFilePdf /> },
+    { path: "/prediction", name: "Prediction", icon: <FaRobot /> },
+  ];
+
   return (
     <nav
       style={{
-        background: "#2E7D32",
-        padding: "15px",
+        background: "linear-gradient(90deg,#2E7D32,#43A047)",
+        padding: "15px 40px",
         display: "flex",
-        gap: "20px",
+        justifyContent: "space-between",
+        alignItems: "center",
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
+        boxShadow: "0 3px 15px rgba(0,0,0,.3)",
       }}
     >
-      <Link to="/" style={{ color: "white", textDecoration: "none" }}>
-        Home
-      </Link>
-
-      <Link to="/upload" style={{ color: "white", textDecoration: "none" }}>
-        Upload Dataset
-      </Link>
-
-      <Link to="/dashboard" style={{ color: "white", textDecoration: "none" }}>
-        Dashboard
-      </Link>
-
-      <Link to="/charts" style={{ color: "white", textDecoration: "none" }}>
-        Charts
-      </Link>
-
-      <Link to="/reports" style={{ color: "white", textDecoration: "none" }}>
-        Reports
-      </Link>
-
-      <Link
-        to="/prediction"
-        style={{ color: "white", textDecoration: "none" }}
+      <div
+        style={{
+          color: "white",
+          fontSize: "28px",
+          fontWeight: "bold",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        }}
       >
-        Prediction
-      </Link>
+        <FaLeaf />
+        AgriVision
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "15px",
+          flexWrap: "wrap",
+        }}
+      >
+        {links.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "white",
+              textDecoration: "none",
+              padding: "10px 16px",
+              borderRadius: "10px",
+              background:
+                location.pathname === item.path
+                  ? "#1B5E20"
+                  : "transparent",
+              transition: "0.3s",
+              fontWeight: "bold",
+            }}
+          >
+            {item.icon}
+            {item.name}
+          </Link>
+        ))}
+      </div>
     </nav>
   );
 }
