@@ -13,10 +13,13 @@ from reportlab.lib.styles import getSampleStyleSheet
 from datetime import datetime
 import os
 
+report_folder = os.path.join(
+    "backend",
+    "reports",
+    f"dataset_{dataset_id}"
+)
 
-REPORT_FOLDER = "backend/reports"
-
-os.makedirs(REPORT_FOLDER, exist_ok=True)
+os.makedirs(report_folder, exist_ok=True)
 
 
 
@@ -33,7 +36,7 @@ def generate_report(
 ):
 
     report_path = os.path.join(
-        REPORT_FOLDER,
+        report_folder,
         filename.replace(".csv", "_report.pdf")
     )
 
