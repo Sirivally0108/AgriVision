@@ -14,11 +14,6 @@ from datetime import datetime
 import os
 
 
-REPORT_FOLDER = "backend/reports"
-
-os.makedirs(REPORT_FOLDER, exist_ok=True)
-
-
 
 def generate_report(
     dataset_id,
@@ -32,8 +27,16 @@ def generate_report(
     agriculture_summary
 ):
 
+    report_folder = os.path.join(
+        "backend",
+        "reports",
+        f"dataset_{dataset_id}"
+    )
+
+    os.makedirs(report_folder, exist_ok=True)
+
     report_path = os.path.join(
-        REPORT_FOLDER,
+        report_folder,
         filename.replace(".csv", "_report.pdf")
     )
 
