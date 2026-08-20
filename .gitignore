@@ -1,14 +1,22 @@
-venv/
+# Python
 __pycache__/
 *.pyc
+venv/
+.env
 
+# Generated uploads
 backend/uploads/*
 !backend/uploads/.gitkeep
 
+# Generated charts
 backend/charts/*
 !backend/charts/.gitkeep
 
+# Generated reports
 backend/reports/*
 !backend/reports/.gitkeep
+
+# Generated PDF reports
+backend/reports/*.pdf
 
 *.db
