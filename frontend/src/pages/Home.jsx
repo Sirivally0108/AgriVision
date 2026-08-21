@@ -8,7 +8,6 @@ function Home() {
       {/* ================= HERO SECTION ================= */}
 
       <section className="hero">
-
         <div className="overlay">
 
           <h1>🌾 AgriVision</h1>
@@ -16,9 +15,9 @@ function Home() {
           <h2>AI Powered Smart Agriculture Platform</h2>
 
           <p>
-            Upload agricultural datasets, generate analytics,
-            visualize crop insights, download reports and
-            predict crop yield using Artificial Intelligence.
+            Upload an agricultural CSV dataset and let AgriVision
+            automatically analyze your data, generate visualizations,
+            create reports, and provide agricultural insights.
           </p>
 
           <Link to="/upload">
@@ -28,185 +27,123 @@ function Home() {
           </Link>
 
         </div>
-
       </section>
+
 
       {/* ================= FEATURES ================= */}
 
       <section className="features">
 
-        <h1>Our Features</h1>
+        <h1>What AgriVision Can Do</h1>
 
         <div className="feature-container">
 
           <div className="card">
             <h2>📂 Upload Dataset</h2>
             <p>
-              Upload agriculture datasets securely into
-              the AgriVision platform.
+              Upload any supported agricultural CSV dataset
+              and begin the analysis workflow.
             </p>
+
+            <Link to="/upload">
+              <button className="feature-btn">
+                Upload
+              </button>
+            </Link>
           </div>
 
-          <div className="card">
-            <h2>📊 Smart Analysis</h2>
-            <p>
-              Automatic statistical analysis of crop,
-              rainfall and soil data.
-            </p>
-          </div>
 
           <div className="card">
-            <h2>📈 Interactive Charts</h2>
+            <h2>📊 Data Analysis</h2>
             <p>
-              Generate Histogram, Scatter Plot,
-              Heatmap and Box Plot instantly.
+              Automatically inspect the uploaded dataset,
+              including its structure, statistics, missing
+              values, duplicates and data quality.
             </p>
+
+            <Link to="/analysis">
+              <button className="feature-btn">
+                View Analysis
+              </button>
+            </Link>
           </div>
+
+
+          <div className="card">
+            <h2>📈 Visualizations</h2>
+            <p>
+              Explore generated charts such as histograms,
+              scatter plots, heatmaps and box plots.
+            </p>
+
+            <Link to="/charts">
+              <button className="feature-btn">
+                View Charts
+              </button>
+            </Link>
+          </div>
+
 
           <div className="card">
             <h2>📄 PDF Reports</h2>
             <p>
-              Download complete agricultural reports
-              with one click.
+              Generate and download a report containing
+              the analysis results for your uploaded dataset.
             </p>
+
+            <Link to="/reports">
+              <button className="feature-btn">
+                View Reports
+              </button>
+            </Link>
           </div>
+
 
           <div className="card">
             <h2>🤖 AI Prediction</h2>
             <p>
-              Predict crop yield using Machine Learning
-              models.
+              Use the machine-learning functionality to make
+              predictions from agricultural data.
             </p>
+
+            <Link to="/prediction">
+              <button className="feature-btn">
+                Prediction
+              </button>
+            </Link>
           </div>
+
 
           <div className="card">
-            <h2>🌱 Sustainable Farming</h2>
+            <h2>🌱 Agricultural Insights</h2>
             <p>
-              Improve farming decisions through
-              intelligent analytics.
+              Turn agricultural data into useful information
+              that can support better farming decisions.
             </p>
           </div>
 
         </div>
+      </section>
+
+      {/* ================= CALL TO ACTION ================= */}
+
+      <section className="cta">
+
+        <h1>Ready to Analyze Your Agricultural Data?</h1>
+
+        <p>
+          Upload a CSV dataset and start exploring your data
+          with AgriVision.
+        </p>
+
+        <Link to="/upload">
+          <button className="upload-btn">
+            Start Analysis
+          </button>
+        </Link>
 
       </section>
 
-      {/* ================= WHY CHOOSE ================= */}
-
-      <section className="why">
-
-        <h1>Why Choose AgriVision?</h1>
-
-        <div className="why-grid">
-
-          <div className="why-card">
-            🚜<br />
-            Modern Farming
-          </div>
-
-          <div className="why-card">
-            📊<br />
-            Data Analytics
-          </div>
-
-          <div className="why-card">
-            🌦<br />
-            Weather Insights
-          </div>
-
-          <div className="why-card">
-            🌾<br />
-            Crop Management
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* ================= STATS ================= */}
-
-      <section className="stats">
-
-        <div className="stat-box">
-          <h2>500+</h2>
-          <p>Datasets Processed</p>
-        </div>
-
-        <div className="stat-box">
-          <h2>1200+</h2>
-          <p>Charts Generated</p>
-        </div>
-
-        <div className="stat-box">
-          <h2>350+</h2>
-          <p>Reports Created</p>
-        </div>
-
-        <div className="stat-box">
-          <h2>98%</h2>
-          <p>Prediction Accuracy</p>
-        </div>
-
-      </section>
-            {/* ================= WORKFLOW ================= */}
-
-      <section className="workflow">
-
-        <h1>How AgriVision Works</h1>
-
-        <div className="workflow-container">
-
-          <div className="step">
-            <div className="circle">1</div>
-            <h3>Upload Dataset</h3>
-            <p>
-              Upload agriculture CSV files securely.
-            </p>
-          </div>
-
-          <div className="arrow">➜</div>
-
-          <div className="step">
-            <div className="circle">2</div>
-            <h3>Analyze Data</h3>
-            <p>
-              Automatic preprocessing and statistical analysis.
-            </p>
-          </div>
-
-          <div className="arrow">➜</div>
-
-          <div className="step">
-            <div className="circle">3</div>
-            <h3>Generate Charts</h3>
-            <p>
-              Histograms, Heatmaps, Scatter Plots and more.
-            </p>
-          </div>
-
-          <div className="arrow">➜</div>
-
-          <div className="step">
-            <div className="circle">4</div>
-            <h3>Download Report</h3>
-            <p>
-              Get complete PDF reports instantly.
-            </p>
-          </div>
-
-          <div className="arrow">➜</div>
-
-          <div className="step">
-            <div className="circle">5</div>
-            <h3>Predict Yield</h3>
-            <p>
-              AI predicts crop yield for better decisions.
-            </p>
-          </div>
-
-        </div>
-
-      </section>
 
       {/* ================= FOOTER ================= */}
 
@@ -224,18 +161,41 @@ function Home() {
 
           </div>
 
+
           <div>
 
             <h3>Quick Links</h3>
 
-            <p>Home</p>
-            <p>Upload Dataset</p>
-            <p>Dashboard</p>
-            <p>Analysis</p>
-            <p>Charts</p>
-            <p>Reports</p>
+            <Link to="/">
+              Home
+            </Link>
+
+            <Link to="/upload">
+              Upload Dataset
+            </Link>
+
+            <Link to="/dashboard">
+              Dashboard
+            </Link>
+
+            <Link to="/analysis">
+              Analysis
+            </Link>
+
+            <Link to="/charts">
+              Charts
+            </Link>
+
+            <Link to="/reports">
+              Reports
+            </Link>
+
+            <Link to="/prediction">
+              Prediction
+            </Link>
 
           </div>
+
 
           <div>
 
