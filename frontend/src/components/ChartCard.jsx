@@ -1,23 +1,23 @@
-function ChartCard({ title }) {
-  return (
-    <div
-      style={{
-        width: "260px",
-        border: "1px solid gray",
-        borderRadius: "10px",
-        padding: "20px",
-        margin: "10px",
-        textAlign: "center"
-      }}
-    >
-      <h3>{title}</h3>
+import "./ChartCard.css";
 
-      <img
-        src="https://via.placeholder.com/220x150"
-        alt="chart"
-      />
+/**
+ * Renders a single backend-generated chart image. `chartKey` is the raw
+ * key from the backend's charts map (e.g. "bar_chart") and is title-cased
+ * for display; the backend is free to add/remove keys without any
+ * frontend change, per the "don't hard-code chart filenames" requirement.
+ */
+export default function ChartCard({ chartKey, imageUrl, description }) {
+  const title = chartKey
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+  return (
+    <div className="chart-card glass-card">
+      <h3 className="chart-card-title">{title}</h3>
+      {description && <p className="chart-card-desc">{description}</p>}
+      <div className="chart-card-image-wrap">
+        <img src={imageUrl} alt={`${title} chart`} loading="lazy" />
+      </div>
     </div>
   );
 }
-
-export default ChartCard;

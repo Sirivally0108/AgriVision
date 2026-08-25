@@ -1,9 +1,8 @@
-function LoadingSpinner() {
+export default function LoadingSpinner({ label = "Loading..." }) {
   return (
-    <h2 style={{ textAlign: "center" }}>
-      Loading...
-    </h2>
+    <div className="state-banner center">
+      <div className="spinner" role="status" aria-label={label} />
+      <p>{label}</p>
+    </div>
   );
 }
-
-export default LoadingSpinner;

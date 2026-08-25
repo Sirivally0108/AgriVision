@@ -1,90 +1,42 @@
-import { Link, useLocation } from "react-router-dom";
-import {
-  FaHome,
-  FaUpload,
-  FaChartBar,
-  FaSearch,
-  FaChartPie,
-  FaFilePdf,
-  FaRobot,
-  FaLeaf,
-} from "react-icons/fa";
+import { NavLink } from "react-router-dom";
+import "./Navbar.css";
 
-function Navbar() {
-  const location = useLocation();
+const LINKS = [
+  { to: "/", label: "Home" },
+  { to: "/upload", label: "Upload" },
+  { to: "/dashboard", label: "Dashboard" },
+  { to: "/analysis", label: "Analysis" },
+  { to: "/charts", label: "Charts" },
+  { to: "/reports", label: "Reports" },
+  { to: "/prediction", label: "Prediction" },
+];
 
-  const links = [
-    { path: "/", name: "Home", icon: <FaHome /> },
-    { path: "/upload", name: "Upload", icon: <FaUpload /> },
-    { path: "/dashboard", name: "Dashboard", icon: <FaChartBar /> },
-    { path: "/analysis", name: "Analysis", icon: <FaSearch /> },
-    { path: "/charts", name: "Charts", icon: <FaChartPie /> },
-    { path: "/reports", name: "Reports", icon: <FaFilePdf /> },
-    { path: "/prediction", name: "Prediction", icon: <FaRobot /> },
-  ];
-
+export default function Navbar() {
   return (
-    <nav
-      style={{
-        background: "linear-gradient(90deg,#2E7D32,#43A047)",
-        padding: "15px 40px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        position: "sticky",
-        top: 0,
-        zIndex: 1000,
-        boxShadow: "0 3px 15px rgba(0,0,0,.3)",
-      }}
-    >
-      <div
-        style={{
-          color: "white",
-          fontSize: "28px",
-          fontWeight: "bold",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
-        }}
-      >
-        <FaLeaf />
-        AgriVision
-      </div>
+    <header className="navbar">
+      <NavLink to="/" className="navbar-brand" end>
+        <span className="navbar-brand-mark" aria-hidden="true">
+          🌾
+        </span>
+        <span className="navbar-brand-text">
+          Agri<span className="navbar-brand-accent">Vision</span>
+        </span>
+      </NavLink>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "15px",
-          flexWrap: "wrap",
-        }}
-      >
-        {links.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              color: "white",
-              textDecoration: "none",
-              padding: "10px 16px",
-              borderRadius: "10px",
-              background:
-                location.pathname === item.path
-                  ? "#1B5E20"
-                  : "transparent",
-              transition: "0.3s",
-              fontWeight: "bold",
-            }}
+      <nav className="navbar-links" aria-label="Primary">
+        {LINKS.map((link) => (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            className={({ isActive }) =>
+              "navbar-link" + (isActive ? " navbar-link-active" : "")
+            }
+            end={link.to === "/"}
           >
-            {item.icon}
-            {item.name}
-          </Link>
+            {link.label}
+          </NavLink>
         ))}
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }
-
-export default Navbar;

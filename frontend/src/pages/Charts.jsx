@@ -1,86 +1,121 @@
-import chartsBg from "../assets/charts.jpg";
+import { useEffect, useState } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import { fetchAnalysis, resolveAssetUrl } from "../services/api.js";
+import ChartCard from "../components/ChartCard.jsx";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
+import ErrorState from "../components/ErrorState.jsx";
+import "./Charts.css";
 
-function Charts() {
+export default function Charts() {
+  const [searchParams] = useSearchParams();
+  const datasetId = searchParams.get("dataset");
+
+  const [analysis, setAnalysis] = useState(null);
+  const [status, setStatus] = useState("idle"); // idle | loading | ready | error
+
+  useEffect(() => {
+    if (!datasetId) {
+      setStatus("idle");
+      setAnalysis(null);
+      return;
+    }
+    let cancelled = false;
+    setStatus("loading");
+    fetchAnalysis(datasetId)
+      .then((data) => {
+        if (!cancelled) {
+          setAnalysis(data);
+          setStatus("ready");
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [datasetId]);
+
+  // Normalize the backend's charts map — it's a flat { key: path } object,
+  // not an array, and the set of keys can vary by dataset. Never assume a
+  // fixed list of chart types.
+  const chartEntries = analysis?.charts
+    ? Object.entries(analysis.charts).filter(([, path]) => Boolean(path))
+    : [];
+
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundImage: `linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),url(${chartsBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className="page">
       <div
-        style={{
-          width: "95%",
-          maxWidth: "1200px",
-          background: "rgba(255,255,255,.15)",
-          backdropFilter: "blur(12px)",
-          borderRadius: "20px",
-          padding: "40px",
-          color: "white",
-        }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            fontSize: "42px",
-            marginBottom: "35px",
-          }}
-        >
-          Data Visualization
-        </h1>
+        className="page-bg"
+        style={{ backgroundImage: "url(/images/charts.jpg)" }}
+      />
+      <div className="page-content charts-content">
+        <span className="eyebrow">📈 Data Visualization</span>
+        <h1 className="section-title">Charts</h1>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
-            gap: "25px",
-          }}
-        >
-          <ChartCard title="Histogram" />
-          <ChartCard title="Scatter Plot" />
-          <ChartCard title="Heatmap" />
-          <ChartCard title="Box Plot" />
-          <ChartCard title="Bar Chart" />
-          <ChartCard title="Pie Chart" />
-        </div>
+        {!datasetId && (
+          <ErrorState
+            title="No dataset selected."
+            message="Please select a dataset from Analysis."
+            action={
+              <Link to="/dashboard" className="btn btn-primary">
+                Go to Dashboard
+              </Link>
+            }
+          />
+        )}
+
+        {datasetId && status === "loading" && (
+          <LoadingSpinner label="Loading charts..." />
+        )}
+
+        {datasetId && status === "error" && (
+          <ErrorState
+            title="Unable to load charts."
+            message="Please make sure the backend is running."
+          />
+        )}
+
+        {datasetId && status === "ready" && analysis && (
+          <>
+            <p className="charts-meta">
+              Dataset: {analysis.filename} · Dataset ID: {analysis.id}
+            </p>
+
+            {chartEntries.length === 0 ? (
+              <ErrorState
+                title="No charts are available for this dataset."
+                message="Try re-uploading the dataset, or check back once processing finishes."
+              />
+            ) : (
+              <div className="charts-grid">
+                {chartEntries.map(([key, path]) => (
+                  <ChartCard
+                    key={key}
+                    chartKey={key}
+                    imageUrl={resolveAssetUrl(path)}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className="charts-actions">
+              <Link
+                to={`/analysis?dataset=${analysis.id}`}
+                className="btn btn-secondary"
+              >
+                Back to Analysis
+              </Link>
+              <Link
+                to={`/reports?dataset=${analysis.id}`}
+                className="btn btn-gold"
+              >
+                View Report
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 }
-
-function ChartCard({ title }) {
-  return (
-    <div
-      style={{
-        background: "rgba(255,255,255,.2)",
-        borderRadius: "15px",
-        padding: "20px",
-        textAlign: "center",
-      }}
-    >
-      <h2>{title}</h2>
-
-      <div
-        style={{
-          marginTop: "20px",
-          height: "220px",
-          borderRadius: "12px",
-          background: "rgba(255,255,255,.25)",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "18px",
-        }}
-      >
-        📊 Chart will appear here
-      </div>
-    </div>
-  );
-}
-
-export default Charts;

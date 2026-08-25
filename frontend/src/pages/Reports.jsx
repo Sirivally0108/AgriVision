@@ -1,109 +1,126 @@
-import reportsBg from "../assets/reports.jpg";
+import { useEffect, useState } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import { fetchAnalysis, resolveAssetUrl } from "../services/api.js";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
+import ErrorState from "../components/ErrorState.jsx";
+import "./Reports.css";
 
-function Reports() {
+export default function Reports() {
+  const [searchParams] = useSearchParams();
+  const datasetId = searchParams.get("dataset");
+
+  const [analysis, setAnalysis] = useState(null);
+  const [status, setStatus] = useState("idle"); // idle | loading | ready | error
+
+  useEffect(() => {
+    if (!datasetId) {
+      setStatus("idle");
+      setAnalysis(null);
+      return;
+    }
+    let cancelled = false;
+    setStatus("loading");
+    fetchAnalysis(datasetId)
+      .then((data) => {
+        if (!cancelled) {
+          setAnalysis(data);
+          setStatus("ready");
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [datasetId]);
+
+  const reportUrl = analysis?.report ? resolveAssetUrl(analysis.report) : null;
+
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundImage: `linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),url(${reportsBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className="page">
       <div
-        style={{
-          width: "90%",
-          maxWidth: "1100px",
-          background: "rgba(255,255,255,.15)",
-          backdropFilter: "blur(12px)",
-          borderRadius: "20px",
-          padding: "40px",
-          color: "white",
-        }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            fontSize: "42px",
-            marginBottom: "35px",
-          }}
-        >
-          Reports
-        </h1>
+        className="page-bg"
+        style={{ backgroundImage: "url(/images/analysis.jpg)" }}
+      />
+      <div className="page-content reports-content">
+        <span className="eyebrow">📄 Reports</span>
+        <h1 className="section-title">Dataset report</h1>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
-            gap: "25px",
-          }}
-        >
-          <ReportCard
-            title="Crop Analysis Report"
-            description="Complete analysis of uploaded agricultural dataset."
+        {!datasetId && (
+          <ErrorState
+            title="No dataset selected."
+            message="Please select a dataset from Analysis."
+            action={
+              <Link to="/dashboard" className="btn btn-primary">
+                Go to Dashboard
+              </Link>
+            }
           />
+        )}
 
-          <ReportCard
-            title="Soil Report"
-            description="Soil statistics and quality report."
-          />
+        {datasetId && status === "loading" && (
+          <LoadingSpinner label="Loading report..." />
+        )}
 
-          <ReportCard
-            title="Yield Report"
-            description="Average yield and crop performance."
+        {datasetId && status === "error" && (
+          <ErrorState
+            title="Unable to load report."
+            message="Please make sure the backend is running."
           />
+        )}
 
-          <ReportCard
-            title="Weather Report"
-            description="Rainfall and temperature statistics."
+        {datasetId && status === "ready" && analysis && !reportUrl && (
+          <ErrorState
+            title="No report is available for this dataset."
+            message="Try re-uploading the dataset so a report can be generated."
           />
-        </div>
+        )}
+
+        {datasetId && status === "ready" && analysis && reportUrl && (
+          <div className="report-card glass-card">
+            <div className="hex-badge report-hex" aria-hidden="true">
+              📄
+            </div>
+            <div className="report-info">
+              <h3 className="report-filename">{analysis.filename}</h3>
+              <span className="report-meta-id">Dataset ID: {analysis.id}</span>
+              <p className="report-desc">
+                A generated PDF covering dataset summary statistics,
+                descriptive analysis, and every chart produced for this
+                dataset.
+              </p>
+            </div>
+            <div className="report-actions">
+              <a
+                href={reportUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
+                View Report
+              </a>
+              <a href={reportUrl} download className="btn btn-gold">
+                Download Report
+              </a>
+            </div>
+          </div>
+        )}
+
+        {datasetId && status === "ready" && (
+          <div className="reports-actions">
+            <Link
+              to={`/analysis?dataset=${datasetId}`}
+              className="btn btn-secondary"
+            >
+              Back to Analysis
+            </Link>
+            <Link to={`/charts?dataset=${datasetId}`} className="btn btn-secondary">
+              View Charts
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
-function ReportCard({ title, description }) {
-  return (
-    <div
-      style={{
-        background: "rgba(255,255,255,.2)",
-        borderRadius: "15px",
-        padding: "25px",
-        textAlign: "center",
-      }}
-    >
-      <h2>{title}</h2>
-
-      <p
-        style={{
-          marginTop: "15px",
-          lineHeight: "1.6",
-        }}
-      >
-        {description}
-      </p>
-
-      <button
-        style={{
-          marginTop: "25px",
-          padding: "12px 30px",
-          border: "none",
-          borderRadius: "10px",
-          background: "#2E7D32",
-          color: "white",
-          cursor: "pointer",
-          fontSize: "16px",
-          fontWeight: "bold",
-        }}
-      >
-        Download PDF
-      </button>
-    </div>
-  );
-}
-
-export default Reports;
