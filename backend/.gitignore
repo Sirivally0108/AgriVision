@@ -1,8 +1,0 @@
-storage/uploads/*
-!storage/uploads/.gitkeep
-storage/charts/*
-!storage/charts/.gitkeep
-storage/reports/*
-!storage/reports/.gitkeep
-agrivision.db
-__pycache__/
